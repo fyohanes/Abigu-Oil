@@ -61,7 +61,7 @@ class ListShopAssignedAssets extends ListRecords
     }
     else {
         Notification::make()
-        ->title('Anavailable Quantity')
+        ->title('Sorry! Max Quantity Reached')
         ->danger()
         ->send();
     }

@@ -18,6 +18,7 @@ use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Hash;
@@ -105,6 +106,28 @@ class UserResource extends Resource
 
             ])
             ->filters([
+                SelectFilter::make('deleted_at')
+                ->options([
+                    'notTrashed' => __('Actives'),
+                    'onlyTrashed' => __('In Actives'),
+                ])
+                ->default('notTrashed')
+                ->label('Status')
+                ->query(function (Builder $query, $data): Builder {
+                    return $query->when(
+                        $data['value'],
+                        function ($query, $value) {
+                            if ($value === 'onlyTrashed') {
+                                return $query->whereNotNull('deleted_at');
+                            }
+
+                            if ($value === 'notTrashed') {
+                                return $query->whereNull('deleted_at');
+                            }
+
+                            return $query;
+                        });
+                }),
                 Filter::make('created_at')
                 ->form([
                     Forms\Components\DatePicker::make('created_from')->label('From'),
@@ -124,8 +147,27 @@ class UserResource extends Resource
 
             ])
             ->actions([
-                // Tables\Actions\ViewAction::make(),
+                //  Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()
+                ->label('Deactivate')
+                ->modalHeading('Deactivate Users')
+                ->modalSubheading('Are you sure you\'d like to inactive this user?')
+                ->modalButton('Deactivate'),
+                Tables\Actions\Action::make('activate')
+                ->hidden(function(User $record){
+                    if(empty($record->deleted_at)){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                })
+                ->action(fn (User $record) => $record->update(['deleted_at'=>null]))
+                ->requiresConfirmation()
+                ->modalHeading('Activate User')
+                ->modalSubheading('Are you sure you\'d like to activate this user?')
+                ->modalButton('Activate')
+                ->color('success')
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),

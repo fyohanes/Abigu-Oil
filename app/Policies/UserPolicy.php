@@ -61,7 +61,10 @@ class UserPolicy
      */
     public function update(User $user, User $model)
     {
-        //
+        $user = Auth()->user();
+        if($user->role_id==1){
+            return true;
+        }
     }
 
     /**
@@ -73,8 +76,11 @@ class UserPolicy
      */
     public function delete(User $user, User $model)
     {
-        //
-    }
+        $user = Auth()->user();
+        if($user->role_id==1){
+            return true;
+        }
+     }
 
     /**
      * Determine whether the user can restore the model.
@@ -85,7 +91,10 @@ class UserPolicy
      */
     public function restore(User $user, User $model)
     {
-        //
+        $user = Auth()->user();
+        if($user->role_id==1){
+            return true;
+        }
     }
 
     /**
@@ -97,6 +106,9 @@ class UserPolicy
      */
     public function forceDelete(User $user, User $model)
     {
-        //
+        $user = Auth()->user();
+        if($user->role_id==1){
+            return true;
+        }
     }
 }
