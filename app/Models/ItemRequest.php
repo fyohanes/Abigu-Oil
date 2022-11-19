@@ -11,10 +11,10 @@ class ItemRequest extends Model
     protected $guarded=[];
 
     public function seller(){
-        return $this->belongsTo(User::class,'requested_by');
+        return $this->belongsTo(User::class,'requested_by')->withTrashed();
     }
     public function admin(){
-        return $this->belongsTo(User::class,'approved_by');
+        return $this->belongsTo(User::class,'approved_by')->withTrashed();
     }
     public function asset(){
         return $this->belongsTo(Asset::class,'asset_id');

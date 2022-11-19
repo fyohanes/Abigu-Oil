@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\ShopAssignedAssetResource\Pages;
 
 use App\Filament\Resources\ShopAssignedAssetResource;
-use App\Models\selledAssets;
+use App\Models\SelledAssets;
 use App\Models\ShopAssignedAsset;
 use Carbon\Carbon;
 use Filament\Notifications\Notification;

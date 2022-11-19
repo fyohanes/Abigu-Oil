@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class selledAssets extends Model
+class SelledAssets extends Model
 {
     use HasFactory;
     protected $guarded = [];
 
     public function seller(){
-        return $this->belongsTo(User::class,'seller_id');
+        return $this->belongsTo(User::class,'seller_id')->withTrashed();
     }
     public function asset(){
         return $this->belongsTo(Asset::class,'asset_id');

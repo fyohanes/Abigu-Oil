@@ -55,7 +55,7 @@ class ListItemRequests extends ListRecords
             'asset_id'=>$record->asset_id,
             'shop_id'=>$record->shop_id,
             'ware_house_id'=>$data['warehouse'],
-            'quantity'=>  $totalQuantity,
+            'quantity'=>  $totalQuantity + $record->quantity,
             'assigned_quantity'=>$record->quantity
         ]);
 
